@@ -152,6 +152,43 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+	            <groupId>com.diffplug.spotless</groupId>
+	            <artifactId>spotless-maven-plugin</artifactId>
+	            <version>2.43.0</version> <!-- Aktuelle Version prüfen -->
+	            <configuration>
+	                <java>
+	                    <!-- Google Java Format verwenden -->
+	                    <!--<googleJavaFormat>
+	                        <version>1.17.0</version>
+	                        <style>GOOGLE</style>
+	                    </googleJavaFormat>-->
+	                    <!-- Weitere Formatter (optional) -->
+	                    <removeUnusedImports/>
+	                    <palantirJavaFormat>
+	                        <version>2.35.0</version>
+	                    </palantirJavaFormat>
+	                    <importOrder/>
+	                </java>
+	            </configuration>
+	            <executions>
+	                <execution>
+                        <id>spotless-apply</id>
+	                    <!-- Bindung an die Phase 'process-sources' -->
+	                    <phase>process-sources</phase>
+	                    <goals>
+	                        <goal>apply</goal>
+	                    </goals>
+                    </execution>
+	                <execution>
+	                <phase>compile</phase>
+	                    <goals>
+	                        <goal>check</goal> <!-- Überprüft Formatierung beim Build -->
+	                        <!-- <goal>apply</goal> --> <!-- Formatiert Code automatisch -->
+	                    </goals>
+	                </execution>
+	            </executions>
+	        </plugin>
 		</plugins>
 	</build>
 
