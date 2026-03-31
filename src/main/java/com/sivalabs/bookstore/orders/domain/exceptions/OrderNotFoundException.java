@@ -1,5 +1,3 @@
-package com.sivalabs.bookstore.orders.domainexceptions;
+package com.sivalabs.bookstore.orders.domain.exceptions;
 
-public class OrderNotFoundException {
-
-}
+public class OrderNotFoundException {}
