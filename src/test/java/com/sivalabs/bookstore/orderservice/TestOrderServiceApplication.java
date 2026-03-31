@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.orderservice;
 
+import com.sivalabs.bookstore.OrderServiceApplication;
 import org.springframework.boot.SpringApplication;
 
 public class TestOrderServiceApplication {
