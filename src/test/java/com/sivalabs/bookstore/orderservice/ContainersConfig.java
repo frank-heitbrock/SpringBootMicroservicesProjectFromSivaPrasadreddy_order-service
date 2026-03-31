@@ -19,6 +19,6 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     RabbitMQContainer rabbitMQContainer() {
-        return new RabbitMQContainer(DockerImageName.parse("rabbitmq:3.12.11-alpine"));
+        return new RabbitMQContainer(DockerImageName.parse("rabbitmq:3.11-alpine"));
     }
 }
