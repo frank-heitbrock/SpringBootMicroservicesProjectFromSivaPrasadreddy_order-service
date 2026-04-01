@@ -68,14 +68,14 @@ class RabbitMQConfig {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, ObjectMapper objectMapper) {
+    RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, ObjectMapper objectMapper) {
         final var rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jacksonConverter(objectMapper));
         return rabbitTemplate;
     }
 
     @Bean
-    public Jackson2JsonMessageConverter jacksonConverter(ObjectMapper objectMapper) {
+    Jackson2JsonMessageConverter jacksonConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
 
