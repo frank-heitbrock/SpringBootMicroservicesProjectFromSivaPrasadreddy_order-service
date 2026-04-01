@@ -21,11 +21,10 @@ class RabbitMQDemoController {
 
     @PostMapping("/send")
     public void sendMessage(@RequestBody MyMessage message) throws JSONException {
-        System.out.println("Sending message: " + message);
         rabbitTemplate.convertAndSend(properties.orderEventsExchange(), message.routingKey(), message.payload());
     }
 
-    record MyMessage(String routingKey, String payload) {}
+    record MyMessage(String routingKey, MyPayload payload) {}
 
     record MyPayload(String content) {}
 }
