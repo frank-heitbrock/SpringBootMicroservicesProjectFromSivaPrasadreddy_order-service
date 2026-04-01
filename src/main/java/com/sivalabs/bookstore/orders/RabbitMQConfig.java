@@ -9,6 +9,7 @@ import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +23,7 @@ class RabbitMQConfig {
     }
 
     @Bean
-    DirectExchange ordersExchange() {
+    DirectExchange exchange() {
         return new DirectExchange(properties.orderEventsExchange());
     }
 
@@ -33,7 +34,7 @@ class RabbitMQConfig {
 
     @Bean
     Binding newOrdersBindingQueue() {
-        return BindingBuilder.bind(newOrdersQueue()).to(ordersExchange()).with(properties.newOrdersQueue());
+        return BindingBuilder.bind(newOrdersQueue()).to(exchange()).with(properties.newOrdersQueue());
     }
 
     @Bean
@@ -43,7 +44,7 @@ class RabbitMQConfig {
 
     @Bean
     Binding deliveredOrdersBindingQueue() {
-        return BindingBuilder.bind(deliveredOrdersQueue()).to(ordersExchange()).with(properties.deliveredOrdersQueue());
+        return BindingBuilder.bind(deliveredOrdersQueue()).to(exchange()).with(properties.deliveredOrdersQueue());
     }
 
     @Bean
@@ -53,7 +54,7 @@ class RabbitMQConfig {
 
     @Bean
     Binding cancelledOrdersBindingQueue() {
-        return BindingBuilder.bind(cancelledOrdersQueue()).to(ordersExchange()).with(properties.cancelledOrdersQueue());
+        return BindingBuilder.bind(cancelledOrdersQueue()).to(exchange()).with(properties.cancelledOrdersQueue());
     }
 
     @Bean
@@ -63,7 +64,7 @@ class RabbitMQConfig {
 
     @Bean
     Binding errorOrdersBindingQueue() {
-        return BindingBuilder.bind(errorOrdersQueue()).to(ordersExchange()).with(properties.errorOrdersQueue());
+        return BindingBuilder.bind(errorOrdersQueue()).to(exchange()).with(properties.errorOrdersQueue());
     }
 
     @Bean
@@ -76,5 +77,13 @@ class RabbitMQConfig {
     @Bean
     public Jackson2JsonMessageConverter jacksonConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
+    }
+
+    // Force the connection to RabbitMQ at startup and fail fast if the connection
+    // cannot be established. This is different to the example from the website
+    // https://www.youtube.com/watch?v=ZKQWwCUEABY
+    @Bean
+    ApplicationRunner runner(ConnectionFactory connectionFactory) {
+        return args -> connectionFactory.createConnection().close();
     }
 }
