@@ -1,0 +1,11 @@
+package com.sivalabs.bookstore.orders.domain.models;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record DeliveryAddress(
+        @NotBlank(message = "Address line 1 is required") String addressLine1,
+        String addressLine2,
+        @NotBlank(message = "City is required") String addressCity,
+        @NotBlank(message = "State is required") String addressState,
+        @NotBlank(message = "Zip code is required") String addressZipCode,
+        @NotBlank(message = "Country is required") String addressCountry) {}
