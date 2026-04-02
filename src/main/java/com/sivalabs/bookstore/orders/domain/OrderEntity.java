@@ -25,11 +25,11 @@ import java.util.Set;
 class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generatror")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generator")
     @SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq")
     private Long id;
 
-    @Column(name = "order_number", nullable = false)
+    @Column(name = "order_numer", nullable = false)
     private String orderNumber;
 
     @Column(name = "username", nullable = false)
@@ -51,14 +51,15 @@ class OrderEntity {
             value = {
                 @AttributeOverride(name = "addressLine1", column = @Column(name = "delivery_address_line1")),
                 @AttributeOverride(name = "addressLine2", column = @Column(name = "delivery_address_line2")),
-                @AttributeOverride(name = "addressCity", column = @Column(name = "delivery_address_city")),
-                @AttributeOverride(name = "addressState", column = @Column(name = "delivery_address_state")),
-                @AttributeOverride(name = "addressZipCode", column = @Column(name = "delivery_address_zip_code")),
-                @AttributeOverride(name = "addressCountry", column = @Column(name = "delivery_address_country"))
+                @AttributeOverride(name = "city", column = @Column(name = "delivery_address_city")),
+                @AttributeOverride(name = "state", column = @Column(name = "delivery_address_state")),
+                @AttributeOverride(name = "zipCode", column = @Column(name = "delivery_address_zip_code")),
+                @AttributeOverride(name = "country", column = @Column(name = "delivery_address_country"))
             })
     private DeliveryAddress deliveryAddress;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private OrderStatus orderStatus;
 
     private String comments;
