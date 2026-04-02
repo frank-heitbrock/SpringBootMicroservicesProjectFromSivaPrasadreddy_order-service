@@ -29,7 +29,7 @@ class OrderEntity {
     @SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq")
     private Long id;
 
-    @Column(name = "order_numer", nullable = false)
+    @Column(name = "order_number", nullable = false)
     private String orderNumber;
 
     @Column(name = "username", nullable = false)
