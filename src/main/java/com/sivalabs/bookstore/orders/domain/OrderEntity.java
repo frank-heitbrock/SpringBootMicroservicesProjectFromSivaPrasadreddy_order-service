@@ -149,4 +149,8 @@ class OrderEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public void setUsername(String username) {
+        this.userName = username;
+    }
 }
