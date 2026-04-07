@@ -1,7 +1,10 @@
 package com.sivalabs.bookstore.orderservice.web.controllers;
 
+import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createOrderRequestDtoWithCorrectData;
 import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createOrderRequestDtoWithInvalidBooks;
 import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createOrderRequestDtoWithInvalidDeliveryAddress;
+import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createOrderRequestDtoWithMissingPhoneNumber;
+import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createOrderRequestDtoWithMissingPhoneNumberAndEmail;
 import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createOrderRequestDtoWithNoItems;
 import static com.sivalabs.bookstore.orderservice.web.controllers.TestDataFactory.createValidOrderRequestDto;
 import static org.junit.jupiter.api.Named.named;
@@ -49,7 +52,7 @@ class OrderControllerUnitTests {
         given(securityService.getLoginUser()).willReturn("testuser");
     }
 
-    @ParameterizedTest // (name = "[{index}]-{0}")
+    @ParameterizedTest
     @MethodSource("createOrderRequestProvider")
     void shouldReturnBadRequestWhenCreateOrderRequestIsInvalid(CreateOrderRequestDto requestDto) throws Exception {
         given(orderService.createOrder(any(CreateOrderRequestDto.class), eq("testuser")))
@@ -61,14 +64,17 @@ class OrderControllerUnitTests {
                 .andExpect(status().isBadRequest());
     }
 
-    //	@ParameterizedTest // (name = "[{index}]-{0}")
-    //	@MethodSource("createOrderRequestProviderAsString")
-    //	void shouldReturnBadRequestWhenCreateOrderRequestIsInvalid(String requestDto) throws Exception {
-    //		given(orderService.createOrder(any(String.class), eq("testuser"))).willReturn(null);
-    //
-    //		mockMvc.perform(post("/api/orders").contentType(MediaType.APPLICATION_JSON)
-    //				.content(objectMapper.writeValueAsString(requestDto))).andExpect(status().isBadRequest());
-    //	}
+    @ParameterizedTest
+    @MethodSource("createOrderRequestProviderAsString")
+    void shouldReturnBadRequestWhenCreateOrderRequestIsInvalid(String requestDto) throws Exception {
+        given(orderService.createOrder(any(CreateOrderRequestDto.class), eq("testuser")))
+                .willReturn(null);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isBadRequest());
+    }
 
     static Stream<Arguments> createOrderRequestProvider() {
         return Stream.of(
@@ -79,13 +85,12 @@ class OrderControllerUnitTests {
                         arguments(named("Order with no items", createOrderRequestDtoWithNoItems()))));
     }
 
-    //	static Stream<Arguments> createOrderRequestProviderAsString() {
-    //        return Stream.of(
-    //                arguments(named("Order with missing phone number",
-    // createOrderRequestDtoWithMissingPhoneNumber())),
-    //                arguments(named(
-    //                        "Order with missing phone number and email",
-    //                        createOrderRequestDtoWithMissingPhoneNumberAndEmail()));
-    //    }
-
+    static Stream<Arguments> createOrderRequestProviderAsString() {
+        return Stream.of(
+                arguments(named("Order with correct data", createOrderRequestDtoWithCorrectData())),
+                arguments(named("Order with missing phone number", createOrderRequestDtoWithMissingPhoneNumber())),
+                arguments(named(
+                        "Order with missing phone number and email",
+                        createOrderRequestDtoWithMissingPhoneNumberAndEmail())));
+    }
 }
