@@ -125,6 +125,13 @@
             <version>5.5.0</version> <!-- Nutzen Sie die aktuellste Version -->
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+		    <groupId>org.instancio</groupId>
+		    <artifactId>instancio-junit</artifactId>
+		    <version>5.4.0</version> <!-- Aktuelle Version prüfen -->
+		    <scope>test</scope>
+		</dependency>
 		
 		<dependency>
 	        <groupId>com.palantir.javaformat</groupId>
@@ -179,7 +186,7 @@
 			<plugin>
 	            <groupId>com.diffplug.spotless</groupId>
 	            <artifactId>spotless-maven-plugin</artifactId>
-	            <version>2.43.0</version> <!-- Aktuelle Version prüfen -->
+	            <version>2.46.0</version> <!-- Aktuelle Version prüfen -->
 	            <configuration>
 	                <java>
 	                    <!-- Google Java Format verwenden -->
@@ -190,7 +197,7 @@
 	                    <!-- Weitere Formatter (optional) -->
 	                    <removeUnusedImports/>
 	                    <palantirJavaFormat>
-	                        <version>2.35.0</version>
+	                        <version>2.39.0</version>
 	                    </palantirJavaFormat>
 	                    <importOrder/>
 	                </java>
