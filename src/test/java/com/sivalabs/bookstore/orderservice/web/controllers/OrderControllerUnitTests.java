@@ -52,7 +52,7 @@ class OrderControllerUnitTests {
         given(securityService.getLoginUser()).willReturn("testuser");
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}]-{0}")
     @MethodSource("createOrderRequestProvider")
     void shouldReturnBadRequestWhenCreateOrderRequestIsInvalid(CreateOrderRequestDto requestDto) throws Exception {
         given(orderService.createOrder(any(CreateOrderRequestDto.class), eq("testuser")))
@@ -64,9 +64,21 @@ class OrderControllerUnitTests {
                 .andExpect(status().isBadRequest());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}]-{0}")
+    @MethodSource("createOrderRequestProviderWithValidData")
+    void shouldReturnOkRequestWhenCreateOrderRequestIsValid(CreateOrderRequestDto requestDto) throws Exception {
+        given(orderService.createOrder(any(CreateOrderRequestDto.class), eq("testuser")))
+                .willReturn(null);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @ParameterizedTest(name = "[{index}]-{0}")
     @MethodSource("createOrderRequestProviderAsString")
-    void shouldReturnBadRequestWhenCreateOrderRequestIsInvalid(String requestDto) throws Exception {
+    void shouldReturnBadRequestWhenCreateOrderRequestIsInvalidAsString(String requestDto) throws Exception {
         given(orderService.createOrder(any(CreateOrderRequestDto.class), eq("testuser")))
                 .willReturn(null);
 
@@ -76,21 +88,39 @@ class OrderControllerUnitTests {
                 .andExpect(status().isBadRequest());
     }
 
+    //    @ParameterizedTest
+    //    @MethodSource("createOrderRequestProviderValidDataAsString")
+    //    void shouldReturnOkRequestWhenCreateOrderRequestIsValidAsString(String requestDto) throws Exception {
+    //        given(orderService.createOrder(any(CreateOrderRequestDto.class), eq("testuser")))
+    //                .willReturn(null);
+    //
+    //        mockMvc.perform(post("/api/orders")
+    //                        .contentType(MediaType.APPLICATION_JSON)
+    //                        .content(objectMapper.writeValueAsString(requestDto)))
+    //                .andExpect(status().is2xxSuccessful());
+    //    }
+
     static Stream<Arguments> createOrderRequestProvider() {
         return Stream.of(
                 arguments(named("Order with invalid book", createOrderRequestDtoWithInvalidBooks())),
                 arguments(
                         named("Order with invalid delivery address", createOrderRequestDtoWithInvalidDeliveryAddress()),
-                        arguments(named("Order with valid data", createValidOrderRequestDto())),
                         arguments(named("Order with no items", createOrderRequestDtoWithNoItems()))));
+    }
+
+    static Stream<Arguments> createOrderRequestProviderWithValidData() {
+        return Stream.of(arguments(named("Order with valid data", createValidOrderRequestDto())));
     }
 
     static Stream<Arguments> createOrderRequestProviderAsString() {
         return Stream.of(
-                arguments(named("Order with correct data", createOrderRequestDtoWithCorrectData())),
                 arguments(named("Order with missing phone number", createOrderRequestDtoWithMissingPhoneNumber())),
                 arguments(named(
                         "Order with missing phone number and email",
                         createOrderRequestDtoWithMissingPhoneNumberAndEmail())));
+    }
+
+    static Stream<Arguments> createOrderRequestProviderValidDataAsString() {
+        return Stream.of(arguments(named("Order with correct data", createOrderRequestDtoWithCorrectData())));
     }
 }
